@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>uk.co.jlugs</groupId>
+  <artifactId>hello-parent</artifactId>
+  <version>1.0</version>
+
+<!--
+     Pom packaging means that there is no code to build when you
+     build this pom file, this is used for sharing configuration
+     between different projects as a "parent" pom or for driving
+     the builds of a project's sub-modules.
+-->
+  <packaging>pom</packaging>
+
+<!--
+     All the sub modules listed here will also be built when you
+     build this pom file:
+-->
+  <modules>
+    <module>hello</module>
+    <module>hello-web</module>
+  </modules>
+
+<!--
+     Any pom.xml file (whether it is a sub module or not) that
+     that declares that this pom is it's parent in a section like
+     the following:
+
+  <parent>
+    <groupId>uk.co.jlugs</groupId>
+    <artifactId>hello-parent</artifactId>
+    <version>1.0</version>
+  </parent>
+
+     Will inherit all the plugin configuration from the plugin
+     management section below.
+-->
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>

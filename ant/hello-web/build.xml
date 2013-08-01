@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="hello-web" basedir="." default="all">
+
+  <property name="base.dir" location="." />
+
+  <property name="app.name" value="${ant.project.name}" />
+  <property name="app.version" value="1.0" />
+
+  <property name="src.dir" location="${base.dir}/src" />
+  <property name="src-resources.dir" location="${base.dir}/resources" />
+
+  <property name="test.dir" location="${base.dir}/test" />
+  <property name="test-resources.dir" location="${base.dir}/resources" />
+
+  <property name="libs.dir" location="${base.dir}/libs" />
+  <property name="libs-test.dir" location="${base.dir}/libs-test" />
+
+  <property name="build.dir" location="${base.dir}/build" />
+  <property name="build.classes.dir" location="${build.dir}/classes" />
+  <property name="build.test-classes.dir" location="${build.dir}/test-classes" />
+  <property name="build.test-reports.dir" location="${build.dir}/test-reports" />
+
+  <property name="webapp.dir" location="${base.dir}/WebContent" />
+  <property name="webapp.libs.dir" location="${base.dir}/WebContent/WEB-INF/lib" />
+
+  <property name="war.file" value="${app.name}-${app.version}.war" />
+
+  <path id="src.classpath">
+    <pathelement location="${build.classes.dir}" />
+    <fileset dir="${webapp.libs.dir}" />
+    <fileset dir="${libs.dir}" />
+  </path>
+
+  <path id="test.classpath">
+    <pathelement location="${build.classes.dir}" />
+    <pathelement location="${build.test-classes.dir}" />
+    <fileset dir="${webapp.libs.dir}" />
+    <fileset dir="${libs.dir}" />
+    <fileset dir="${libs-test.dir}" />
+  </path>
+
+  <target name="clean" description="Removes all build artifacts.">
+    <delete dir="${build.dir}" />
+  </target>
+
+  <target name="hello-compile-src">
+    <mkdir dir="${build.classes.dir}" />
+    <javac destdir="${build.classes.dir}" includeantruntime="false" debug="true">
+      <classpath refid="src.classpath" />
+      <src path="${src.dir}" />
+      <compilerarg value="-Xlint" />
+    </javac>
+    <copy todir="${build.classes.dir}">
+      <fileset dir="${src-resources.dir}" />
+    </copy>
+  </target>
+
+  <target name="hello-compile-test">
+    <mkdir dir="${build.test-classes.dir}" />
+    <javac destdir="${build.test-classes.dir}" includeantruntime="false" debug="true">
+      <classpath refid="test.classpath" />
+      <src path="${test.dir}" />
+      <compilerarg value="-Xlint" />
+    </javac>
+    <copy todir="${build.test-classes.dir}">
+      <fileset dir="${test-resources.dir}" />
+    </copy>
+  </target>
+
+  <target name="hello-build" depends="hello-compile-src">
+    <mkdir dir="${build.dir}" />
+    <war destfile="${build.dir}/${war.file}">
+      <fileset dir="${webapp.dir}" />
+      <classes dir="${build.classes.dir}" />
+    </war>
+  </target>
+
+  <target name="hello-test" depends="hello-compile-test">
+    <mkdir dir="${build.test-reports.dir}" />
+    <junit printsummary="yes" showoutput="true">
+      <classpath refid="test.classpath" />
+      <formatter type="xml" />
+    </junit>
+  </target>
+
+  <target name="all" depends="clean,hello-build,hello-test" description="Almighty all task, builds and tests everything." />
+</project>
